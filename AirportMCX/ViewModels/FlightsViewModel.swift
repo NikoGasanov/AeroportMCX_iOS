@@ -16,28 +16,59 @@ class FlightsViewModel: ObservableObject {
 
     func loadPlaceholderData() {
         arrivals = [
-            Flight(flightNumber: "MCX321", destination: "Paris", time: "8:20", status: "Вылетел", terminal: "A"),
-            Flight(flightNumber: "MCX654", destination: "Berlin", time: "8:45", status: "Вылетел", terminal: "A"),
-            Flight(flightNumber: "MCX987", destination: "Tokyo", time: "9:20", status: "Вылетел", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "10:15", status: "Отменен", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "10:25", status: "Задерживается", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "11:15", status: "Посадка", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Регистрация", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Регистрация", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Регистрация", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Регистрация", terminal: "A")
+            Flight(
+                    flightNumber: "SU123",
+                    destination: "Москва",
+                    status: "Задержан",
+                    scheduledTime: "12:30",
+                    actualTime: "14:00", // Рейс задержан
+                    terminal: "A",
+                    checkInDesk: "12",
+                    gate: "B23",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeing 737"
+                ),
+                Flight(
+                    flightNumber: "SU456",
+                    destination: "Дубай",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "FlyDubai",
+                    aircraft: "Airbus A320"
+                )
             
         ]
 
         departures = [
             
-            Flight(flightNumber: "MCX123", destination: "Moscow", time: "12:30", status: "Регистрация", terminal: "A"),
-            Flight(flightNumber: "MCX456", destination: "Dubai", time: "14:00", status: "Задерживается", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Mackhachkala", time: "16:15", status: "Прибыл", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Прибыл", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Прибыл", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Прибыл", terminal: "A"),
-            Flight(flightNumber: "MCX789", destination: "Istanbul", time: "16:15", status: "Прибыл", terminal: "A")
+            Flight(
+                    flightNumber: "SU123",
+                    destination: "Москва",
+                    status: "Задержан",
+                    scheduledTime: "12:30",
+                    actualTime: "14:00", // Рейс задержан
+                    terminal: "A",
+                    checkInDesk: "12",
+                    gate: "B23",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeing 737"
+                ),
+                Flight(
+                    flightNumber: "SU456",
+                    destination: "Дубай",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "FlyDubai",
+                    aircraft: "Airbus A320"
+                )
         
         ]
     }
