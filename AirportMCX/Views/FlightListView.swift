@@ -33,7 +33,7 @@ struct FlightListView: View {
                             }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.gray)
-                                    .padding(.trailing, 20) // Отступ внутри поля
+                                    .padding(.trailing, 25) // Отступ внутри поля
                             }
                         }
                     }
