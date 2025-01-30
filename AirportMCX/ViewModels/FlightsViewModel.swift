@@ -80,6 +80,90 @@ class FlightsViewModel: ObservableObject {
                     gate: "C1",
                     airline: "FlyDubai",
                     aircraft: "Airbus A320"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
                 )
         
         ]
