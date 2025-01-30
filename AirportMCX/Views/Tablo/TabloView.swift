@@ -2,21 +2,51 @@ import SwiftUI
 
 struct TabloView: View {
     @State private var selectedSubTab = 0 // Активная вкладка
-    @State private var swipeProgress: CGFloat = 0 // Прогресс полоски (не синхронный)
+    @State private var swipeProgress: CGFloat = 0 // Прогресс полоски
     @StateObject private var viewModel = FlightsViewModel()
     @State private var isSearching = false // Управляет поиском
 
     var body: some View {
         VStack(spacing: 0) {
-            // Поисковая строка
+            // Верхняя розовая панель с "Онлайн табло" и 🔍
+            ZStack {
+                Color(hex: "#FF00C0") // Фон ярко-розового цвета
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(height: 60) // Высота верхней панели
+
+                // Текст "Онлайн табло" в центре
+                Text("Онлайн табло")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .center)
+
+                // Кнопка 🔍 справа
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            isSearching.toggle()
+                        }
+                    }) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(.trailing, 16)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing) // Выравниваем кнопку вправо
+            }
+
+            // Кастомное поле поиска без границ
             if isSearching {
-                VStack(spacing: 0) {
+                VStack(spacing: 4) {
                     HStack {
                         TextField("Поиск", text: $viewModel.searchText)
-                            .padding(.vertical, 8)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.leading)
-                            .frame(width: 350)
+                            .font(.system(size: 18)) // Размер текста
+                            .foregroundColor(.black) // Черный текст
+                            .padding(.vertical, 6)
+                            .background(Color.clear) // Полностью убираем фон
+                            .accentColor(.black) // Цвет курсора
 
                         Button(action: {
                             withAnimation(.easeInOut) {
@@ -29,14 +59,16 @@ struct TabloView: View {
                                 .foregroundColor(.gray)
                         }
                     }
-                    .padding(.horizontal, 10)
+                    .padding(.horizontal, 16)
 
+                    // Черная полоска-разделитель на всю ширину экрана
                     Rectangle()
-                        .frame(width: 350, height: 2)
                         .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 2)
                 }
-                .transition(.move(edge: .trailing).combined(with: .opacity))
-                .padding(.bottom, 8)
+                .padding(.top, 6) // Отступ под розовой частью
+                .transition(.move(edge: .top).combined(with: .opacity)) // Анимация появления
             }
 
             // Кастомный Tab Bar с полоской
@@ -57,28 +89,6 @@ struct TabloView: View {
                 }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                if !isSearching {
-                    Text(selectedSubTab == 0 ? "Табло Вылета" : "Табло Прилета")
-                        .font(.headline)
-                        .transition(.move(edge: .leading).combined(with: .opacity))
-                }
-            }
-
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if !isSearching {
-                    Button(action: {
-                        withAnimation(.easeInOut) {
-                            isSearching = true
-                        }
-                    }) {
-                        Image(systemName: "magnifyingglass")
-                            .transition(.scale)
-                    }
-                }
-            }
-        }
+        .navigationBarHidden(true) // Скрываем стандартный Navigation Bar
     }
 }
