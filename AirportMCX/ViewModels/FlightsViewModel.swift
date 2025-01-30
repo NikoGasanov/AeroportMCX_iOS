@@ -22,7 +22,7 @@ class FlightsViewModel: ObservableObject {
                     status: "Задержан",
                     scheduledTime: "12:30",
                     actualTime: "14:00", // Рейс задержан
-                    terminal: "A",
+                    terminal: "B",
                     checkInDesk: "12",
                     gate: "B23",
                     airline: "Аэрофлот",
@@ -34,7 +34,7 @@ class FlightsViewModel: ObservableObject {
                     status: "По расписанию",
                     scheduledTime: "14:00",
                     actualTime: nil, // Рейс по расписанию
-                    terminal: "B",
+                    terminal: "A",
                     checkInDesk: "15",
                     gate: "C1",
                     airline: "FlyDubai",
@@ -51,19 +51,31 @@ class FlightsViewModel: ObservableObject {
                     status: "Задержан",
                     scheduledTime: "12:30",
                     actualTime: "14:00", // Рейс задержан
-                    terminal: "A",
+                    terminal: "B",
                     checkInDesk: "12",
                     gate: "B23",
                     airline: "Аэрофлот",
                     aircraft: "Boeing 737"
                 ),
-                Flight(
+            Flight(
+                    flightNumber: "SU456",
+                    destination: "Санкт-Петербург",
+                    status: "По расписанию",
+                    scheduledTime: "14:00",
+                    actualTime: nil, // Рейс по расписанию
+                    terminal: "B",
+                    checkInDesk: "15",
+                    gate: "C1",
+                    airline: "Аэрофлот",
+                    aircraft: "Boeng 777"
+                ),
+            Flight(
                     flightNumber: "SU456",
                     destination: "Дубай",
                     status: "По расписанию",
                     scheduledTime: "14:00",
                     actualTime: nil, // Рейс по расписанию
-                    terminal: "B",
+                    terminal: "A",
                     checkInDesk: "15",
                     gate: "C1",
                     airline: "FlyDubai",
