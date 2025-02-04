@@ -5,22 +5,23 @@ struct TabloView: View {
     @State private var swipeProgress: CGFloat = 0 // Прогресс полоски
     @StateObject private var viewModel = FlightsViewModel()
     @State private var isSearching = false // Управляет поиском
+    @State private var currentDate = Date() // Храним текущую дату
 
     var body: some View {
         VStack(spacing: 0) {
-            // Верхняя розовая панель с "Онлайн табло" и 🔍
+            // Верхняя панель с Онлайн табло
             ZStack {
-                Color(hex: "#4e106f") // Фон ярко-розового цвета (#4e106f)/(#FF00C0)
+                Color(hex: "#FF00C0")
                     .edgesIgnoringSafeArea(.top)
-                    .frame(height:50) // Высота верхней панели
+                    .frame(height: 50) // Высота верхней панели
 
-                // Текст "Онлайн табло" в центре
+
                 Text("Онлайн табло")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .center)
 
-                // Кнопка 🔍 справа
+
                 HStack {
                     Spacer()
                     Button(action: {
@@ -34,10 +35,11 @@ struct TabloView: View {
                             .padding(.trailing, 16)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing) // Выравниваем кнопку вправо
+
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
-            // Кастомное поле поиска без границ
+            // Кастомное поле поиска без границ (zaep)
             if isSearching {
                 VStack(spacing: 4) {
                     HStack {
@@ -45,8 +47,8 @@ struct TabloView: View {
                             .font(.system(size: 18)) // Размер текста
                             .foregroundColor(.black) // Черный текст
                             .padding(.vertical, 6)
-                            .background(Color.clear) // Полностью убираем фон
-                            .accentColor(.black) // Цвет курсора
+                            .background(Color.clear)
+                            .accentColor(.black)
 
                         Button(action: {
                             withAnimation(.easeInOut) {
@@ -61,18 +63,25 @@ struct TabloView: View {
                     }
                     .padding(.horizontal, 16)
 
-                    // Черная полоска-разделитель на всю ширину экрана
+
                     Rectangle()
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
                         .frame(height: 2)
                 }
-                .padding(.top, 6) // Отступ под розовой частью
+                .padding(.top, 6) // Отступ под "Верхняя панель с Онлайн табло"
                 .transition(.move(edge: .top).combined(with: .opacity)) // Анимация появления
             }
 
             // Кастомный Tab Bar с полоской
             CustomTabBar(selectedTab: $selectedSubTab, swipeProgress: $swipeProgress)
+
+            // Дата под верхним таб-баром (колхоз + перегруз UI)
+//            Text(formattedDate(currentDate))
+//                .font(.subheadline)
+//                .foregroundColor(.gray)
+//                .padding(.top, 6)
+//                .padding(.bottom, 4)
 
             // TabView с обычным свайпом без синхронизации полоски
             TabView(selection: $selectedSubTab) {
@@ -91,4 +100,13 @@ struct TabloView: View {
         }
         .navigationBarHidden(true) // Скрываем стандартный Navigation Bar
     }
+
+// Функция для форматирования даты
+    
+//    private func formattedDate(_ date: Date) -> String {
+//        let formatter = DateFormatter()
+//        formatter.locale = Locale(identifier: "ru_RU") // Русская локализация
+//        formatter.dateFormat = "EEEE, d MMMM" // Формат: Понедельник, 29 января
+//        return formatter.string(from: date).capitalized // Делаем первую букву заглавной
+//    }
 }

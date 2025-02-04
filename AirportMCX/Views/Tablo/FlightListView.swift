@@ -38,7 +38,7 @@ struct FlightListView: View {
             .background(Color.clear)
         }
         .onChange(of: selectedTab) { _ in
-            // Закрываем поиск при смене вкладки
+            // Закрывает поиск при смене вкладки
             withAnimation {
                 isSearching = false
                 viewModel.searchText = ""

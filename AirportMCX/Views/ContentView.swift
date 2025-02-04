@@ -1,9 +1,4 @@
-//
-//  ContentView.swift
-//  AirportMCX
-//
 //  Created by Niko Gasanov on 15.01.2025.
-//
 
 
 import SwiftUI
@@ -22,7 +17,7 @@ struct ContentView: View {
             }
             .tag(0)
 
-            // Вкладка Паркинг
+            // Вкладка Паркинга (Мб сделаю просто считывание qr-кода)
             NavigationView {
                 ParkingView()
             }
@@ -31,7 +26,7 @@ struct ContentView: View {
             }
             .tag(1)
 
-            // Вкладка Бизнес залы
+            // Вкладка Бизнес-залов
             NavigationView {
                 BusinessLoungeView()
             }
@@ -40,7 +35,7 @@ struct ContentView: View {
             }
             .tag(2)
 
-            // Вкладка Навигация
+            // Вкладка Навигации
             NavigationView {
                 NavigationScreenView()
             }

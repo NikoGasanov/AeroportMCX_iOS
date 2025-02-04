@@ -5,7 +5,6 @@ class FlightsViewModel: ObservableObject {
     @Published var departures: [Flight] = []
     @Published var searchText: String = "" {
         didSet {
-            // Обновляем фильтрованные данные
             objectWillChange.send()
         }
     }
@@ -14,6 +13,8 @@ class FlightsViewModel: ObservableObject {
         loadPlaceholderData()
     }
 
+    // Пока так ¯\_(ツ)_/¯
+    
     func loadPlaceholderData() {
         arrivals = [
             Flight(

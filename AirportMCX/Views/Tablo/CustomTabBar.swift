@@ -2,14 +2,14 @@ import SwiftUI
 
 struct CustomTabBar: View {
     @Binding var selectedTab: Int
-    @Binding var swipeProgress: CGFloat // Управляет полоской
+    @Binding var swipeProgress: CGFloat
     let tabTitles = ["Вылеты", "Прилеты"]
-    let tabIcons = ["airplane.departure", "airplane.arrival"] // SF Symbols для иконок
+    let tabIcons = ["airplane.departure", "airplane.arrival"] // системные икнонки взлета/посадки
 
     var body: some View {
         GeometryReader { geometry in
             let tabWidth = geometry.size.width / CGFloat(tabTitles.count) // Ширина одного таба
-            let indicatorWidth = tabWidth / 1.5 // Полоска в 1.5 раза уже
+            let indicatorWidth = tabWidth / 1.5 // Полоска в 1.5 раза Уже
 
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -21,7 +21,7 @@ struct CustomTabBar: View {
                             }
                         }) {
                             HStack {
-                                Image(systemName: tabIcons[index]) // Добавляем иконки самолетов
+                                Image(systemName: tabIcons[index])
                                     .font(.system(size: 16))
                                 Text(tabTitles[index])
                                     .font(.headline)
@@ -34,9 +34,9 @@ struct CustomTabBar: View {
 
                 // Полоска с закругленными краями
                 Rectangle()
-                    .fill(Color(hex: "#4e106f")) // Цвет полоски HEX #4e106f
-                    .frame(width: indicatorWidth, height: 3) // Полоска в 1.5 раза уже
-                    .cornerRadius(1.5) // Закругленные края
+                    .fill(Color(hex: "#4e106f"))
+                    .frame(width: indicatorWidth, height: 3)
+                    .cornerRadius(1.5) // Закругленние краев
                     .offset(x: swipeProgress * tabWidth - geometry.size.width / 2 + tabWidth / 2)
                     .animation(.easeInOut(duration: 0.3), value: swipeProgress) // Движение после свайпа
             }
@@ -46,7 +46,7 @@ struct CustomTabBar: View {
     }
 }
 
-// Расширение для HEX-цветов
+// Расширение для HEX-цветов (зач я это сделал?)
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

@@ -24,7 +24,7 @@ struct FlightRow: View {
 
                         Text(actualTime)
                             .font(.headline)
-                            .foregroundColor(.red) // Новое время выделено красным
+                            .foregroundColor(.red) // Новое время выделил красным
                     }
                 } else {
                     // Если рейс по расписанию
