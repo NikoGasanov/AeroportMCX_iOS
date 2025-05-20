@@ -10,12 +10,11 @@ extension UIApplication {
 
 struct FlightListView: View {
     @StateObject var viewModel: FlightsViewModel
-    @Binding var selectedTab: Int // Синхронизируем вкладки Прилеты/Вылеты
-    @Binding var isSearching: Bool // Управляет поиском
+    @Binding var selectedTab: Int
+    @Binding var isSearching: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            // Контейнер для списка рейсов
             ZStack {
                 if viewModel.filteredFlights(for: selectedTab).isEmpty {
                     Text("По вашему запросу ничего не найдено")
@@ -32,13 +31,17 @@ struct FlightListView: View {
                         .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                     }
                     .listStyle(PlainListStyle())
+                    // <-- Здесь добавляем pull-to-refresh
+                    .refreshable {
+                        // предположим, что ваш viewModel умеет перезагружать данные
+                        await viewModel.reloadFlights()
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.clear)
         }
         .onChange(of: selectedTab) { _ in
-            // Закрывает поиск при смене вкладки
             withAnimation {
                 isSearching = false
                 viewModel.searchText = ""

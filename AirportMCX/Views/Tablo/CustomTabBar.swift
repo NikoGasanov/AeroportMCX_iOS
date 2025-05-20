@@ -34,7 +34,7 @@ struct CustomTabBar: View {
 
                 // Полоска с закругленными краями
                 Rectangle()
-                    .fill(Color(hex: "#4e106f"))
+                    .fill(Color(hex: "#D5335C")) //#4E106F
                     .frame(width: indicatorWidth, height: 3)
                     .cornerRadius(1.5) // Закругленние краев
                     .offset(x: swipeProgress * tabWidth - geometry.size.width / 2 + tabWidth / 2)
@@ -70,3 +70,6 @@ extension Color {
         )
     }
 }
+
+
+

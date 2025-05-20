@@ -5,57 +5,74 @@ struct FlightRow: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading) {
+            // ─── Левая колонка ──────────────────────────
+            VStack(alignment: .leading, spacing: 4) {
                 Text(flight.flightNumber)
                     .font(.headline)
-                Text(flight.destination)
+                Text(flight.direction)
                     .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
+
             Spacer()
-            VStack(alignment: .trailing) {
-                // Отображение времени
-                if let actualTime = flight.actualTime {
-                    // Если рейс задержан
-                    HStack(spacing: 4) {
-                        Text(flight.scheduledTime)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .strikethrough() // Зачеркнутое запланированное время
 
-                        Text(actualTime)
-                            .font(.headline)
-                            .foregroundColor(.red) // Новое время выделил красным
-                    }
-                } else {
-                    // Если рейс по расписанию
-                    Text(flight.scheduledTime)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                }
-
+            // ─── Правая колонка ─────────────────────────
+            VStack(alignment: .trailing, spacing: 4) {
+                timeSection
                 Text(flight.status)
                     .font(.subheadline)
-                    .foregroundColor(statusColor(for: flight.status))
+                    .foregroundColor(color(for: flight.status))
             }
         }
-        .padding()
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(8)
-        .shadow(radius: 2)
+        .padding(.vertical, 8)
     }
 
-    private func statusColor(for status: String) -> Color {
-        switch status {
-        case "Вылетел", "Прибыл", "Регистрация":
+    /// Показ времени — учитываем задержку
+    @ViewBuilder
+    private var timeSection: some View {
+        if let exp = flight.expectedTime, exp != extractTime(from: flight.scheduledInfo) {
+            // задержка: показываем плановое зачёркнутым и фактическое красным
+            HStack(spacing: 4) {
+                Text(extractTime(from: flight.scheduledInfo))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .strikethrough()
+                Text(exp)
+                    .font(.headline)
+                    .foregroundColor(.red)
+            }
+        } else {
+            // по расписанию
+            Text(extractTime(from: flight.scheduledInfo))
+                .font(.headline)
+        }
+    }
+
+    /// Подсветка статуса
+    private func color(for status: String) -> Color {
+        switch status.lowercased() {
+        case let s where s.contains("вылетел"),
+             let s where s.contains("прибыл"),
+             let s where s.contains("регистрация"):
             return .green
-        case "Задержан":
+        case let s where s.contains("задерж"):
             return .yellow
-        case "Отменен":
+        case let s where s.contains("отмен"):
             return .red
-        case "Посадка":
+        case let s where s.contains("посадк"):
             return .blue
         default:
-            return .black
+            return .primary
         }
+    }
+
+    /// Из строки «… 19.05 в 02:50 тер. A» вытаскиваем только «02:50»
+    private func extractTime(from full: String) -> String {
+        // находим последнюю подстроку «в HH:MM»
+        if let range = full.range(of: #"в\s(\d{2}:\d{2})"#,
+                                  options: .regularExpression) {
+            return String(full[range]).replacingOccurrences(of: "в ", with: "")
+        }
+        return full   // fallback
     }
 }
