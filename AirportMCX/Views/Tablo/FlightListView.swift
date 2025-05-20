@@ -1,45 +1,62 @@
-
 import SwiftUI
 import UIKit
 
 extension UIApplication {
     func endEditing() {
-        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        sendAction(#selector(UIResponder.resignFirstResponder),
+                   to: nil, from: nil, for: nil)
     }
 }
 
 struct FlightListView: View {
     @StateObject var viewModel: FlightsViewModel
-    @Binding var selectedTab: Int
+    @Binding var selectedTab: Int   // 0 = Вылеты, 1 = Прилеты
     @Binding var isSearching: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            ZStack {
-                if viewModel.filteredFlights(for: selectedTab).isEmpty {
-                    Text("По вашему запросу ничего не найдено")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                        .padding()
-                } else {
-                    List(viewModel.filteredFlights(for: selectedTab)) { flight in
-                        NavigationLink(
-                            destination: FlightDetailView(flight: flight, isDeparture: selectedTab == 0)
-                        ) {
-                            FlightRow(flight: flight)
+            let flights = viewModel.filteredFlights(for: selectedTab)
+
+            if flights.isEmpty {
+                Text("По вашему запросу ничего не найдено")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                // Явно вертикальный скролл
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(spacing: 20) {
+                        ForEach(Array(flights.enumerated()), id: \.element.id) { index, flight in
+                            VStack(spacing: 0) {
+                                NavigationLink(
+                                    destination: FlightDetailView(
+                                        flight: flight,
+                                        isDeparture: selectedTab == 0
+                                    )
+                                ) {
+                                    FlightRow(flight: flight)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(PlainButtonStyle())
+
+                                // рисуем разделитель, кроме последней карточки
+                                if index < flights.count - 1 {
+                                    Divider()
+                                        .background(Color.gray)
+                                        .padding(.leading, 10)
+                                        .padding(.trailing, 10)
+                                }
+                            }
                         }
-                        .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                     }
-                    .listStyle(PlainListStyle())
-                    // <-- Здесь добавляем pull-to-refresh
+                    .padding(.vertical, 8)
                     .refreshable {
-                        // предположим, что ваш viewModel умеет перезагружать данные
                         await viewModel.reloadFlights()
                     }
                 }
+                // ! Никаких .gesture или .simultaneousGesture — вертикальный ScrollView
+                //   больше не перехватывает горизонтальные свайпы.
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.clear)
         }
         .onChange(of: selectedTab) { _ in
             withAnimation {
@@ -51,3 +68,4 @@ struct FlightListView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+

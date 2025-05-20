@@ -1,100 +1,114 @@
+// TabloView.swift
+
 import SwiftUI
 
 struct TabloView: View {
-    @State private var selectedSubTab = 0  // 0 - Вылеты, 1 - Прилеты
-    @State private var swipeProgress: CGFloat = 0  // Прогресс свайпа (реальное смещение)
+    @State private var selectedSubTab = 0
+    @State private var swipeProgress: CGFloat = 0  // больше не нужен, но оставим, вдруг что-то ещё на него завязано
     @StateObject private var viewModel = FlightsViewModel()
     @State private var isSearching = false
     @State private var currentDate = Date()
 
     var body: some View {
         VStack(spacing: 0) {
-            // ————————— Верхняя панель —————————
-            ZStack {
-                Color(hex: "#47156B")
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(height: 50)
-
-                // Центрированный заголовок
-                Text("Онлайн табло")
-                    .font(.headline)
-                    .foregroundColor(.white)
-
-                // Кнопка поиска справа
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        withAnimation(.easeInOut) {
-                            isSearching.toggle()
+            // ——— Шапка с градиентом ———
+            LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "#47156B"), Color(hex: "#D5335C")]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .ignoresSafeArea(edges: .top)
+            .frame(height: 60)
+            .overlay(
+                ZStack {
+                    Text("Онлайн табло")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    HStack {
+                        Spacer()
+                        Button {
+                            withAnimation { isSearching.toggle() }
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .font(.title3)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 16)
                         }
-                    }) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.title3)
-                            .foregroundColor(.white)
-                            .padding(.trailing, 16)
                     }
                 }
-                .frame(height: 50)
-            }
+            )
 
-            // Кастомное поле поиска (если активно)
+            // ——— Поиск ———
             if isSearching {
                 VStack(spacing: 4) {
                     HStack {
                         TextField("Поиск", text: $viewModel.searchText)
                             .font(.system(size: 18))
-                            .foregroundColor(.black)
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
-                            .frame(height: 32)
                             .background(Color(.systemGray6))
                             .cornerRadius(8)
-                        Button(action: {
-                            withAnimation(.easeInOut) {
+                        Button {
+                            withAnimation {
                                 isSearching = false
                                 viewModel.searchText = ""
                                 UIApplication.shared.endEditing()
                             }
-                        }) {
+                        } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
                         }
                     }
                     .padding(.horizontal, 16)
                     Rectangle()
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
                         .frame(height: 2)
+                        .foregroundColor(.black)
                 }
                 .padding(.top, 6)
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
-            // … остальной код без изменений …
+            // ——— Ваш кастомный сегмент ———
             CustomTabBar(selectedTab: $selectedSubTab, swipeProgress: $swipeProgress)
 
+            // ——— Дата ———
             Text(formattedDate(currentDate))
                 .font(.caption)
                 .foregroundColor(.gray)
-                .padding(.top, 8)
-                .padding(.bottom, 6)
+                .padding(.vertical, 8)
 
-            PagingScrollView(currentPage: $selectedSubTab, offset: $swipeProgress, pageCount: 2) {
-                FlightListView(viewModel: viewModel, selectedTab: $selectedSubTab, isSearching: $isSearching)
-                FlightListView(viewModel: viewModel, selectedTab: $selectedSubTab, isSearching: $isSearching)
+            // ——— Здесь TabView заменяет PagingScrollView ———
+            TabView(selection: $selectedSubTab) {
+                FlightListView(
+                    viewModel: viewModel,
+                    selectedTab: $selectedSubTab,
+                    isSearching: $isSearching
+                )
+                .tag(0)
+
+                FlightListView(
+                    viewModel: viewModel,
+                    selectedTab: $selectedSubTab,
+                    isSearching: $isSearching
+                )
+                .tag(1)
             }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            // тянем на всю оставшуюся область:
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .navigationBarHidden(true)
         .onAppear {
+            // если вы где-то ещё используете swipeProgress
             swipeProgress = CGFloat(selectedSubTab)
         }
     }
 
     private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "EEEE, d MMMM"
-        return formatter.string(from: date).capitalized
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "ru_RU")
+        f.dateFormat = "EEEE, d MMMM"
+        return f.string(from: date).capitalized
     }
 }
 

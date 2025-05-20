@@ -1,3 +1,5 @@
+// FlightRow.swift
+
 import SwiftUI
 
 struct FlightRow: View {
@@ -5,74 +7,61 @@ struct FlightRow: View {
 
     var body: some View {
         HStack {
-            // ─── Левая колонка ──────────────────────────
+            // Левая колонка: город/маршрут + номер рейса
             VStack(alignment: .leading, spacing: 4) {
-                Text(flight.flightNumber)
-                    .font(.headline)
                 Text(flight.direction)
+                    .font(.headline)
+                    .foregroundColor(.primary)    // чёрный
+                Text(flight.flightNumber)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.secondary)  // серый
             }
 
             Spacer()
 
-            // ─── Правая колонка ─────────────────────────
-            VStack(alignment: .trailing, spacing: 4) {
-                timeSection
-                Text(flight.status)
-                    .font(.subheadline)
-                    .foregroundColor(color(for: flight.status))
-            }
+            // Правая колонка: время
+            timeSection
         }
-        .padding(.vertical, 8)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(UIColor.systemBackground))
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        )
+        .padding(.horizontal, 16)
     }
 
-    /// Показ времени — учитываем задержку
+    // MARK: — Время вылета/прилёта (план/факт)
     @ViewBuilder
     private var timeSection: some View {
-        if let exp = flight.expectedTime, exp != extractTime(from: flight.scheduledInfo) {
-            // задержка: показываем плановое зачёркнутым и фактическое красным
+        if let actual = flight.expectedTime, actual != scheduledTime {
             HStack(spacing: 4) {
-                Text(extractTime(from: flight.scheduledInfo))
+                Text(scheduledTime)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .strikethrough()
-                Text(exp)
+                Text(actual)
                     .font(.headline)
-                    .foregroundColor(.red)
+                    .foregroundColor(.primary)
             }
         } else {
-            // по расписанию
-            Text(extractTime(from: flight.scheduledInfo))
+            Text(scheduledTime)
                 .font(.headline)
+                .foregroundColor(.primary)
         }
     }
 
-    /// Подсветка статуса
-    private func color(for status: String) -> Color {
-        switch status.lowercased() {
-        case let s where s.contains("вылетел"),
-             let s where s.contains("прибыл"),
-             let s where s.contains("регистрация"):
-            return .green
-        case let s where s.contains("задерж"):
-            return .yellow
-        case let s where s.contains("отмен"):
-            return .red
-        case let s where s.contains("посадк"):
-            return .blue
-        default:
-            return .primary
-        }
+    private var scheduledTime: String {
+        extractTime(from: flight.scheduledInfo)
     }
 
-    /// Из строки «… 19.05 в 02:50 тер. A» вытаскиваем только «02:50»
+    // Извлечь время «HH:MM» из строки вида «… 19.05 в 02:50 тер. A»
     private func extractTime(from full: String) -> String {
-        // находим последнюю подстроку «в HH:MM»
-        if let range = full.range(of: #"в\s(\d{2}:\d{2})"#,
-                                  options: .regularExpression) {
+        if let range = full.range(of: #"в\s(\d{2}:\d{2})"#, options: .regularExpression) {
             return String(full[range]).replacingOccurrences(of: "в ", with: "")
         }
-        return full   // fallback
+        return full
     }
 }
+
+
