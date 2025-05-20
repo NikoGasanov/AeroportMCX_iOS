@@ -12,36 +12,61 @@ enum FlightType: String {          // удобное перечисление
     case departure  = "departures"
 }
 
-
-
 actor FlightService {
     static let shared = FlightService()
-    private let baseURL = URL(string: "http://127.0.0.1:8000/flights/")!        //http://192.168.88.19:8000/flights
+    private let baseURL = URL(string: "http://172.20.10.11:8000/flights/")!
     
-    // внутренняя обёртка
+    // внутренняя обёртка под JSON:
+    // {
+    //   "data": [ { …поля рейса… }, { … } ]
+    // }
     private struct FlightsResponse: Decodable {
         let data: [Flight]
     }
     
-    private let decoder: JSONDecoder = JSONDecoder()   // (пока) достаточно дефолтного
+    // Настроенный декодер один раз
+    private let decoder: JSONDecoder = {
+        let d = JSONDecoder()
+        d.keyDecodingStrategy = .convertFromSnakeCase
+        return d
+    }()
     
+    /// Забираем массив рейсов для given type (arrivals/departures)
     func fetchFlights(_ type: FlightType) async throws -> [Flight] {
         let url = baseURL.appendingPathComponent(type.rawValue)
         let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let jsonStr = String(data: data, encoding: .utf8) {
+            print("❗️Flights JSON:\n\(jsonStr)")
+        } else {
+            print("❗️Flights JSON: <не удалось декодировать в UTF-8>")
+        }
         
         guard let http = response as? HTTPURLResponse,
               (200...299).contains(http.statusCode) else {
             throw URLError(.badServerResponse)
         }
         
-        // декодирование в FlightsResponse потом берём .data
-        return try decoder.decode(FlightsResponse.self, from: data).data
+        // decode wrapper и возвращаем .data
+        let wrapper = try decoder.decode(FlightsResponse.self, from: data)
+        return wrapper.data
     }
     
-    // параллельный запрос прилётов и вылетов
-    func fetchAll() async throws -> (arrivals:[Flight], departures:[Flight]) {
+    /// Параллельно забираем и прилёты, и вылеты
+    func fetchAll() async throws -> (arrivals: [Flight], departures: [Flight]) {
         async let arr = fetchFlights(.arrival)
         async let dep = fetchFlights(.departure)
         return try await (arrivals: arr, departures: dep)
     }
 }
+
+
+
+
+
+
+
+
+
+
+// http://192.168.88.19:8000/flights

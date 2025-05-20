@@ -9,8 +9,8 @@ struct FlightDetailView: View {
             VStack(spacing: 20) {
 
                 // Заголовок
-                Text(isDeparture ? "Детали рейса (Вылет)"
-                                 : "Детали рейса (Прилёт)")
+                Text(isDeparture ? "Детали рейса (Прилет)"
+                                 : "Детали рейса (Вылет)")
                     .font(.largeTitle).bold()
                     .padding(.top)
 
@@ -55,7 +55,6 @@ struct FlightDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: - Частные помощники
     /// Отображение времени с учётом задержки
     @ViewBuilder
     private var timeSection: some View {
