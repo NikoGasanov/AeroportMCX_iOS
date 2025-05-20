@@ -16,12 +16,7 @@ enum FlightType: String {          // удобное перечисление
 
 actor FlightService {
     static let shared = FlightService()
-    private let baseURL = URL(string: "http://192.168.62.135:8000/flights/")!
-    
-    // http://192.168.62.135:8000/flights/ //
-    // http://192.168.88.19:8000/flights/ //
-    
-    
+    private let baseURL = URL(string: "http://127.0.0.1:8000/flights/")!        //http://192.168.88.19:8000/flights
     
     // внутренняя обёртка
     private struct FlightsResponse: Decodable {

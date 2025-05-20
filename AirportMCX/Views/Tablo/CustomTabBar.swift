@@ -3,7 +3,7 @@ import SwiftUI
 struct CustomTabBar: View {
     @Binding var selectedTab: Int
     @Binding var swipeProgress: CGFloat
-    let tabTitles = [ "Прилеты" ,"Вылеты"]
+    let tabTitles = ["Прилеты", "Вылеты"]
     let tabIcons = ["airplane.arrival", "airplane.departure"] // системные икнонки взлета/посадки
 
     var body: some View {
